@@ -1,15 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { Role } from '@prisma/client';
+import { SearchInput } from 'src/common/models/search-input.model';
 
 @InputType()
-export class UpdateUserInput {
+export class SearchUserInput extends SearchInput {
   @Field({ nullable: true })
-  firstname?: string;
-  @Field({ nullable: true })
-  lastname?: string;
+  role?: Role;
   @Field(() => [String], { nullable: true })
   subject?: string[];
   @Field(() => [String], { nullable: true })
   examination?: string[];
-  @Field(() => [String], { nullable: true })
-  invigilate?: string[];
 }

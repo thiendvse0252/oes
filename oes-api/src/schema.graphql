@@ -47,7 +47,9 @@ type Query {
 """User role"""
 enum Role {
   ADMIN
-  USER
+  LECTURER
+  MANAGER
+  STUDENT
 }
 
 type Token {
@@ -59,8 +61,11 @@ type Token {
 }
 
 input UpdateUserInput {
+  examination: [String!]
   firstname: String
+  invigilate: [String!]
   lastname: String
+  subject: [String!]
 }
 
 type User {
