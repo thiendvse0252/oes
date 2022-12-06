@@ -34,12 +34,12 @@ Table Examination {
   startAt DateTime
   submitAt DateTime
   status ExaminationStatus [not null]
-  User User
+  user User
   userId String
   Invigilate Invigilate
   invigilateId String
   isEnabled Boolean [not null, default: true]
-  Topic Topic
+  topic Topic
   topicId String
 }
 

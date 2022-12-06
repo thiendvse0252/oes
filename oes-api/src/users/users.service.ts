@@ -59,7 +59,10 @@ export class UsersService {
   }
 
   searchUser(data: SearchUserInput) {
-    const { role, subject, examination, ...searchInput } = data;
+    const {
+      //  role, subject, examination,
+      ...searchInput
+    } = data;
     const { keyword, pageNum, pageSize, orderBy, sort } = searchInput;
 
     return this.prisma.user.findMany({

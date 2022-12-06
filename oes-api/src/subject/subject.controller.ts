@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Patch,
+  Post,
   Put,
   Req,
   UseGuards,
@@ -11,6 +12,8 @@ import {
 import { Subject } from '@prisma/client';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { SearchInput } from 'src/common/models/search-input.model';
+import { CreateSubjectInput } from './dto/create-subject-input';
 import { UpdateSubjectInput } from './dto/update-subject-input';
 import { SubjectService } from './subject.service';
 
@@ -43,5 +46,15 @@ export class SubjectController {
   async deleteSubject(@Req() req: Request): Promise<Subject> {
     const id = req.query.id as string;
     return this.subjectService.deleteSubject(id);
+  }
+
+  @Post('search')
+  async searchSubject(@Body() data: SearchInput): Promise<Subject[]> {
+    return this.subjectService.searchSubject(data);
+  }
+
+  @Post()
+  async createSubject(@Body() data: CreateSubjectInput): Promise<Subject> {
+    return this.subjectService.createSubject(data);
   }
 }

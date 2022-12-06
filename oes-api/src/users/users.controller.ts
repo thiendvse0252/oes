@@ -7,11 +7,13 @@ import {
   Req,
   Delete,
   Patch,
+  Post,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserEntity } from 'src/common/decorators/user.decorator';
 import { ChangePasswordInput } from './dto/change-password.input';
+import { SearchUserInput } from './dto/search-user-input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
@@ -21,10 +23,9 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get('search')
-  async searchUser(@UserEntity() user: User): Promise<User> {
-    user.password = undefined;
-    return user;
+  @Post('search')
+  async searchUser(@Body() body: SearchUserInput): Promise<User[]> {
+    return this.usersService.searchUser(body);
   }
 
   @Get('me')
