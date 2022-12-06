@@ -12,7 +12,9 @@ import {
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserEntity } from 'src/common/decorators/user.decorator';
+import { AssignSubjectInput } from './dto/assign-subject-input';
 import { ChangePasswordInput } from './dto/change-password.input';
+import { CreateUserInput } from './dto/create-user.input';
 import { SearchUserInput } from './dto/search-user-input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './models/user.model';
@@ -50,6 +52,11 @@ export class UsersController {
     return this.usersService.changePassword(id, password, data);
   }
 
+  @Put('resetPassword')
+  resetPassword(@Body() { id }: { id: string }) {
+    return this.usersService.resetPassword(id);
+  }
+
   @Put()
   async updateUser(@Body() data: UpdateUserInput & { id: string }) {
     const { id, ...newUserData } = data;
@@ -65,6 +72,21 @@ export class UsersController {
   // async appendExamination(@Body() { id }: { id: string }) {
   //   return this.usersService.appendExamination(id);
   // }
+
+  @Post('assignSubject')
+  async assignSubject(
+    @Body() { id, subjectId }: AssignSubjectInput & { id: string }
+  ) {
+    return this.usersService.assignSubject(id, subjectId);
+  }
+
+  @Post('joinSubject')
+  async joinSubject(
+    @UserEntity() user: User,
+    @Body() { subjectId }: AssignSubjectInput
+  ) {
+    return this.usersService.assignSubject(user.id, subjectId);
+  }
 
   @Patch()
   async updateMultipleUser(@Body() data: UpdateUserInput & { ids: string[] }) {
@@ -82,5 +104,10 @@ export class UsersController {
   async deleteUser(@Req() req: Request): Promise<User> {
     const id = req.query.id as string;
     return this.usersService.deleteUser(id);
+  }
+
+  @Post()
+  async createUser(@Body() data: CreateUserInput): Promise<User> {
+    return this.usersService.createUser(data);
   }
 }

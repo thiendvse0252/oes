@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { SearchInput } from 'src/common/models/search-input.model';
 import { CreateSubjectInput } from './dto/create-subject-input';
@@ -8,31 +9,75 @@ import { UpdateSubjectInput } from './dto/update-subject-input';
 export class SubjectService {
   constructor(private prisma: PrismaService) {}
 
-  getSubject(id: string) {
-    return this.prisma.subject.findUnique({
-      where: { id },
-    });
+  async getSubject(id: string) {
+    try {
+      const response = await this.prisma.subject.findUnique({
+        where: { id },
+      });
+      return response;
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new BadRequestException(`Subject not found.`);
+      }
+      throw new Error(e);
+    }
   }
 
-  updateMultipleSubject(ids: string[], data: UpdateSubjectInput) {
-    return this.prisma.subject.updateMany({
-      where: { id: { in: ids } },
-      data: data,
-    });
+  async updateMultipleSubject(ids: string[], data: UpdateSubjectInput) {
+    try {
+      const response = await this.prisma.subject.updateMany({
+        where: { id: { in: ids } },
+        data: data,
+      });
+      return response;
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new BadRequestException(`Subject not found.`);
+      }
+      throw new Error(e);
+    }
   }
 
   updateSubject(subjectId: string, newSubjectData: UpdateSubjectInput) {
-    return this.prisma.subject.update({
-      data: newSubjectData,
-      where: { id: subjectId },
-    });
+    try {
+      const response = this.prisma.subject.update({
+        data: newSubjectData,
+        where: { id: subjectId },
+      });
+      return response;
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new BadRequestException(`Subject not found.`);
+      }
+      throw new Error(e);
+    }
   }
 
   deleteSubject(subjectId: string) {
-    return this.prisma.subject.update({
-      where: { id: subjectId },
-      data: { isEnabled: false },
-    });
+    try {
+      const response = this.prisma.subject.update({
+        where: { id: subjectId },
+        data: { isEnabled: false },
+      });
+      return response;
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new BadRequestException(`Subject not found.`);
+      }
+      throw new Error(e);
+    }
   }
 
   searchSubject(data: SearchInput) {
@@ -49,12 +94,23 @@ export class SubjectService {
     });
   }
 
-  createSubject(data: CreateSubjectInput) {
+  async createSubject(data: CreateSubjectInput) {
     const { name } = data;
-    return this.prisma.subject.create({
-      data: {
-        name: name,
-      },
-    });
+    try {
+      const response = await this.prisma.subject.create({
+        data: {
+          name: name,
+        },
+      });
+      return response;
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new BadRequestException(`Subject not found.`);
+      }
+      throw new Error(e);
+    }
   }
 }

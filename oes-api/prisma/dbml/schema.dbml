@@ -11,7 +11,7 @@ Table User {
   firstname String
   lastname String
   role Role [not null]
-  subject Subject [not null]
+  subject UserSubject [not null]
   examination Examination [not null]
   invigilate Invigilate [not null]
   isEnabled Boolean [not null, default: true]
@@ -66,14 +66,27 @@ Table Question {
   isEnabled Boolean [not null, default: true]
 }
 
+Table UserSubject {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  isEnabled Boolean [not null, default: true]
+  subject Subject
+  subjectId String
+  user User
+  userId String
+
+  indexes {
+    (userId, subjectId) [unique]
+  }
+}
+
 Table Subject {
   id String [pk]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   name String [not null]
   question Question [not null]
-  user User
-  userId String
+  user UserSubject [not null]
   isEnabled Boolean [not null, default: true]
 }
 
@@ -115,6 +128,8 @@ Ref: Question.topicId > Topic.id
 
 Ref: Question.subjectId > Subject.id
 
-Ref: Subject.userId > User.id
+Ref: UserSubject.subjectId > Subject.id
+
+Ref: UserSubject.userId > User.id
 
 Ref: Answer.questionId > Question.id

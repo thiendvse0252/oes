@@ -26,7 +26,7 @@ model User {
   firstname   String?
   lastname    String?
   role        Role
-  subject     Subject[]
+  subject     UserSubject[]
   examination Examination[]
   invigilate  Invigilate[]
   isEnabled   Boolean       @default(true)
@@ -102,15 +102,26 @@ model Question {
   isEnabled Boolean  @default(true)
 }
 
+model UserSubject {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  isEnabled Boolean  @default(true)
+  subject   Subject? @relation(fields: [subjectId], references: [id])
+  subjectId String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.ObjectId
+
+  @@unique([userId, subjectId])
+}
+
 model Subject {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
   name      String
   question  Question[]
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    String?    @db.ObjectId
-  isEnabled Boolean    @default(true)
+  user      UserSubject[]
+  isEnabled Boolean       @default(true)
 }
 
 // Đáp án
