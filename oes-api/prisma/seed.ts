@@ -4,6 +4,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.deleteMany();
+  await prisma.invigilate.deleteMany();
+  await prisma.examination.deleteMany();
+  await prisma.topic.deleteMany();
+  await prisma.subject.deleteMany();
+  await prisma.question.deleteMany();
+  await prisma.answer.deleteMany();
 
   console.log('Seeding...');
 
@@ -13,7 +19,7 @@ async function main() {
       firstname: 'Nguyen Cong',
       lastname: 'Doan',
       password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
-      role: 'USER',
+      role: 'STUDENT',
     },
   });
   const user2 = await prisma.user.create({
@@ -21,7 +27,7 @@ async function main() {
       email: 'dang@oes.com',
       firstname: 'Lo Ba',
       lastname: 'Hai Dang',
-      role: 'ADMIN',
+      role: 'LECTURER',
       password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
     },
   });

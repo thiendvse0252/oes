@@ -30,6 +30,12 @@ export class UsersResolver {
     return this.usersService.updateUser(user.id, newUserData);
   }
 
+  // @UseGuards(JwtAuthGuard)
+  // @Query(() => User)
+  // async viewUser(@Args() { id }: { id: string }) {
+  //   return this.usersService.getUser(id);
+  // }
+
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
   async changePassword(

@@ -33,7 +33,7 @@ export class AuthService {
         data: {
           ...payload,
           password: hashedPassword,
-          role: 'USER',
+          role: 'STUDENT',
         },
       });
 
@@ -73,7 +73,9 @@ export class AuthService {
   }
 
   validateUser(userId: string): Promise<User> {
-    return this.prisma.user.findUnique({ where: { id: userId } });
+    return this.prisma.user.findFirst({
+      where: { id: userId, isEnabled: true },
+    });
   }
 
   getUserFromToken(token: string): Promise<User> {

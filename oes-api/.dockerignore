@@ -4,3 +4,6 @@ npm-debug.log
 dist/
 graphql/
 test/
+Dockerfile
+.dockerignore
+node_modules
