@@ -37,6 +37,11 @@ const handleTokenExpired = (exp: number) => {
   }, timeLeft);
 };
 
+const persistSession = (refreshToken: string | null) => {
+  if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+  else localStorage.removeItem('refreshToken');
+};
+
 const setSession = (accessToken: string | null) => {
   if (accessToken) {
     localStorage.setItem('accessToken', accessToken);
@@ -51,4 +56,4 @@ const setSession = (accessToken: string | null) => {
   }
 };
 
-export { isValidToken, setSession };
+export { isValidToken, setSession, persistSession };

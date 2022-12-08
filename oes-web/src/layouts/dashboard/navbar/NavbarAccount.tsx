@@ -6,6 +6,7 @@ import { Box, Link, Typography } from '@mui/material';
 import useAuth from '../../../hooks/useAuth';
 // components
 import MyAvatar from '../../../components/MyAvatar';
+import { capitalCase } from 'change-case';
 
 // ----------------------------------------------------------------------
 
@@ -54,10 +55,10 @@ export default function NavbarAccount({ isCollapse }: Props) {
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            {user?.account?.username}
+            {user?.firstname + ' ' + user?.lastname}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            {user?.account?.roleName}
+            {capitalCase(user?.role ?? '')}
           </Typography>
         </Box>
       </RootStyle>

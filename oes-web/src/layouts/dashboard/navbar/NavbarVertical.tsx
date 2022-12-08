@@ -43,7 +43,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }: Props)
 
   const { user } = useAuth();
 
-  const navConfig = user?.account?.roleName === 'Lecturer' ? lectureNavConfig : studentNavConfig;
+  const navConfig = user?.role === 'LECTURER' ? lectureNavConfig : studentNavConfig;
 
   const { pathname } = useLocation();
 
