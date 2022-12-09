@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useReducer } from 'react';
 // utils
 import axios from '../utils/axios';
-import { isValidToken, setSession } from '../utils/jwt';
+import { isValidToken, persistSession, setSession } from '../utils/jwt';
 // @types
 import localStorage from 'redux-persist/es/storage';
 import { ActionMap, AuthState, AuthUser, JWTContextType } from '../@types/auth';
@@ -93,25 +93,9 @@ function AuthProvider({ children }: AuthProviderProps) {
         if (accessToken !== null && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const id = await localStorage.getItem('id');
+          const response = await axios.get('/me');
 
-          const account_id = await localStorage.getItem('account_id');
-
-          const response = await axios.get('/api/accounts/search_accounts_by_id', {
-            params: { id: account_id },
-          });
-
-          const user = {
-            accessToken,
-            account: {
-              id: id,
-              accountId: account_id,
-              code: response.data.code,
-              username: response.data.username,
-              roleId: response.data.role.id,
-              roleName: response.data.role.role_name,
-            },
-          };
+          const user = response.data;
 
           dispatch({
             type: Types.Initial,
@@ -144,42 +128,31 @@ function AuthProvider({ children }: AuthProviderProps) {
     initialize();
   }, [state.isAuthenticated]);
 
-  const login = async (userName: string, password: string) => {
-    const response: any = await axios.post('/api/accounts/login', {
-      userName,
+  const login = async (username: string, password: string) => {
+    const response: any = await axios.post('/auth/login', {
+      username,
       password,
     });
+
     if (response.status !== 200) {
       throw new Error(response.message);
     }
 
-    const { id, token, account_id, code, username, role_id, role_name } = response.data;
+    const { accessToken, refreshToken } = response.data;
 
-    const user = {
-      accessToken: token,
-      account: {
-        id: id,
-        accountId: account_id,
-        code: code,
-        username: username,
-        roleId: role_id,
-        roleName: role_name,
-      },
-    };
+    setSession(accessToken);
+    persistSession(refreshToken);
 
-    localStorage.setItem('id', id);
-    localStorage.setItem('account_id', account_id);
-
-    setSession(token);
+    const user: any = await axios.get('/me');
 
     dispatch({
       type: Types.Login,
-      payload: { user },
+      payload: { user: user.data },
     });
   };
 
   const register = async (email: string, password: string, firstName: string, lastName: string) => {
-    const response = await axios.post('/api/account/register', {
+    const response = await axios.post('/auth/register', {
       email,
       password,
       firstName,
@@ -199,8 +172,6 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     setSession(null);
-    localStorage.removeItem('id');
-    localStorage.removeItem('account_id');
     dispatch({ type: Types.Logout });
   };
 

@@ -67,9 +67,7 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    return this.generateTokens({
-      userId: user.id,
-    });
+    return this.generateTokens({ userId: user.id });
   }
 
   validateUser(userId: string): Promise<User> {

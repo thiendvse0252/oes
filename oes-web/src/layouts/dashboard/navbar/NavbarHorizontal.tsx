@@ -31,7 +31,7 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
 function NavbarHorizontal() {
   const { user } = useAuth();
 
-  const navConfig = user?.account?.roleName === 'Lecturer' ? lectureNavConfig : studentNavConfig;
+  const navConfig = user?.role === 'LECTURER' ? lectureNavConfig : studentNavConfig;
   return (
     <RootStyle>
       <Container maxWidth={false}>
