@@ -95,11 +95,12 @@ export class SubjectService {
   }
 
   async createSubject(data: CreateSubjectInput) {
-    const { name } = data;
+    const { name, code } = data;
     try {
       const response = await this.prisma.subject.create({
         data: {
           name: name,
+          code: code,
         },
       });
       return response;

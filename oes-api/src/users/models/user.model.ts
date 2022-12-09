@@ -31,4 +31,7 @@ export class User extends BaseModel {
 
   @HideField()
   password: string;
+
+  @Field({ nullable: true })
+  avatar?: string;
 }
