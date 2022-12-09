@@ -31,9 +31,11 @@ export class UsersController {
   }
 
   @Get('me')
-  async me(@UserEntity() user: User): Promise<User> {
+  async me(
+    @UserEntity() user: User & { displayName: string }
+  ): Promise<User & { displayName: string }> {
     user.password = undefined;
-    return user;
+    return { ...user, displayName: user.firstname + ' ' + user.lastname };
   }
 
   @Put('updateProfile')
