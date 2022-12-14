@@ -3,8 +3,8 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class UpdateQuestionInput {
   @Field({ nullable: true })
-  content?: string;
+  name?: string;
 
-  @Field({ nullable: true })
-  description?: string;
+  @Field()
+  code?: string;
 }

@@ -9,50 +9,55 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Question, Subject } from '@prisma/client';
+
+import { Question } from '@prisma/client';
+import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { SearchInput } from 'src/common/models/search-input.model';
 import { CreateQuestionInput } from './dto/create-question-input';
-import { SearchQuestionInput } from './dto/search-question-input';
 import { UpdateQuestionInput } from './dto/update-question-input';
+import { QuestionService } from './question.service';
 
 @Controller('question')
 @UseGuards(JwtAuthGuard)
 export class QuestionController {
-  constructor(private questionController: QuestionController) {}
+
+  constructor(private questionService: QuestionService) {}
+
   @Get()
-  async getSubject(@Req() req: Request): Promise<Question> {
+  async getQuestion(@Req() req: Request): Promise<Question> {
     const id = req.query.id as string;
-    return this.questionService.getSubject(id);
+    return this.questionService.getQuestion(id);
   }
 
   @Put()
-  async updateSubject(@Body() data: UpdateQuestionInput & { id: string }) {
-    const { id, ...newSubjectData } = data;
-    return this.questionService.updateSubject(id, newSubjectData);
+  async updateQuestion(@Body() data: UpdateQuestionInput & { id: string }) {
+    const { id, ...newQuestionData } = data;
+    return this.questionService.updateQuestion(id, newQuestionData);
   }
 
   @Patch()
-  async updateMultipleSubject(
-    @Body() data:  & { ids: string[] }
+  async updateMultipleQuestion(
+    @Body() data: UpdateQuestionInput & { ids: string[] }
   ) {
-    const { ids, ...newSubjectData } = data;
-    return this.questionService.updateMultipleSubject(ids, newSubjectData);
+    const { ids, ...newQuestionData } = data;
+    return this.questionService.updateMultipleQuestion(ids, newQuestionData);
   }
 
   @Delete()
-  async deleteSubject(@Req() req: Request): Promise<Question> {
+  async deleteQuestion(@Req() req: Request): Promise<Question> {
     const id = req.query.id as string;
-    return this.questionService.deleteSubject(id);
+    return this.questionService.deleteQuestion(id);
   }
 
   @Post('search')
-  async searchSubject(@Body() data: SearchQuestionInput): Promise<Question[]> {
-    return this.questionService.searchSubject(data);
+  async searchQuestion(@Body() data: SearchInput): Promise<Question[]> {
+    return this.questionService.searchQuestion(data);
   }
 
   @Post()
-  async createSubject(@Body() data: CreateQuestionInput): Promise<Question> {
-    return this.questionService.createSubject(data);
+  async createQuestion(@Body() data: CreateQuestionInput): Promise<Question> {
+    return this.questionService.createQuestion(data);
+
   }
 }

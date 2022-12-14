@@ -1,19 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-
 import { SearchInput } from 'src/common/models/search-input.model';
-import { CreateQuestionInput } from './dto/create-question-input';
-import { UpdateQuestionInput } from './dto/update-question-input';
+import { CreateExaminationInput } from './dto/create-examination-input';
+import { UpdateExaminationStatusInput } from './dto/update-examinationStatus-input';
 
 @Injectable()
-export class QuestionService {
+export class ExaminationService {
   constructor(private prisma: PrismaService) {}
 
-  async getQuestion(id: string) {
+  async getExamination(id: string) {
     try {
-
-      const response = await this.prisma.question.findUnique({
+      const response = await this.prisma.examination.findUnique({
         where: { id },
       });
       return response;
@@ -22,15 +20,15 @@ export class QuestionService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2025'
       ) {
-        throw new BadRequestException(`Question not found.`);
+        throw new BadRequestException(`Examination not found.`);
       }
-      throw e;
+      throw new Error(e);
     }
   }
 
-  async updateMultipleQuestion(ids: string[], data: UpdateQuestionInput) {
+  async updateMultipleExamination(ids: string[], data: UpdateExaminationStatusInput) {
     try {
-      const response = await this.prisma.question.updateMany({
+      const response = await this.prisma.examination.updateMany({
         where: { id: { in: ids } },
         data: data,
       });
@@ -40,18 +38,17 @@ export class QuestionService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2025'
       ) {
-        throw new BadRequestException(`Question not found.`);
+        throw new BadRequestException(`Examination not found.`);
       }
-      throw e;
+      throw new Error(e);
     }
   }
 
-  updateQuestion(questionId: string, newQuestionData: UpdateQuestionInput) {
+  updateExamination(examinationId: string, newExaminationData: UpdateExaminationStatusInput) {
     try {
-      const response = this.prisma.question.update({
-        data: {newQuestionData},
-
-        where: { id: questionId },
+      const response = this.prisma.examination.update({
+        data: newExaminationData,
+        where: { id: examinationId },
       });
       return response;
     } catch (e) {
@@ -59,16 +56,16 @@ export class QuestionService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2025'
       ) {
-        throw new BadRequestException(`Question not found.`);
+        throw new BadRequestException(`Examination not found.`);
       }
       throw new Error(e);
     }
   }
 
-  deleteQuestion(questionId: string) {
+  deleteExamination(examinationId: string) {
     try {
-      const response = this.prisma.question.update({
-        where: { id: questionId },
+      const response = this.prisma.examination.update({
+        where: { id: examinationId },
         data: { isEnabled: false },
       });
       return response;
@@ -77,47 +74,44 @@ export class QuestionService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2025'
       ) {
-        throw new BadRequestException(`Question not found.`);
+        throw new BadRequestException(`Examination not found.`);
       }
       throw new Error(e);
     }
   }
 
-  searchQuestion(data: SearchInput) {
-
+  searchExamination(data: SearchInput) {
     const { keyword, pageNum, pageSize, orderBy, sort } = data;
 
-    return this.prisma.question.findMany({
+    return this.prisma.examination.findMany({
       take: pageSize,
       skip: (pageNum - 1) * pageSize,
       orderBy: { [orderBy]: sort },
       where: {
         isEnabled: true,
-        OR: [{ content: { contains: keyword } }],
+        OR: [{ topicId: { contains: keyword } }],
       },
     });
   }
 
-  async createQuestion(data: CreateQuestionInput) {
+  async createExamination(data: CreateExaminationInput) {
     const { name, code } = data;
     try {
-      
-      const response = await this.prisma.question.create({
-        data: {
-          id: name,
-          content: code,
-        },
-      });
-      return response;
+      // const response = await this.prisma.examination.create({
+      //   data: {
+      //     id: name,
+      //     isEnabled: code,
+      //   },
+      // });
+      // return response;
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2025'
       ) {
-        throw new BadRequestException(`Question not found.`);
+        throw new BadRequestException(`Examination not found.`);
       }
       throw new Error(e);
-
     }
   }
 }

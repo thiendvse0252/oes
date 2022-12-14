@@ -12,10 +12,10 @@ import { loggingMiddleware } from 'src/common/middleware/logging.middleware';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GqlConfigService } from './gql-config.service';
 import { SubjectModule } from './subject/subject.module';
-import { QuestionModule } from './question/question.module';
-import { AnswerController } from './answer/answer.controller';
-import { AnswerService } from './answer/answer.service';
-import { AnswerModule } from './answer/answer.module';
+
+import { TopicModule} from './topic/topic.module';
+import { QuestionModule} from './question/question.module';
+import { ExaminationModule} from './examination/examination.module';
 
 @Module({
   imports: [
@@ -35,8 +35,9 @@ import { AnswerModule } from './answer/answer.module';
     AuthModule,
     UsersModule,
     SubjectModule,
+    TopicModule,
     QuestionModule,
-    AnswerModule,
+    ExaminationModule,
   ],
   controllers: [AppController, AnswerController],
   providers: [AppService, AppResolver, AnswerService],

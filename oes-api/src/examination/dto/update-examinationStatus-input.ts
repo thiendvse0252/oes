@@ -1,11 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateQuestionInput {
+export class UpdateExaminationStatusInput {
   @Field({ nullable: true })
   name?: string;
-
-  @Field()
-  code?: string;
-
 }
