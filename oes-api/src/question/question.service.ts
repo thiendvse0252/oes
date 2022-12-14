@@ -24,7 +24,9 @@ export class QuestionService {
       ) {
         throw new BadRequestException(`Question not found.`);
       }
-      throw e;
+
+      throw new Error(e);
+
     }
   }
 
@@ -43,6 +45,7 @@ export class QuestionService {
         throw new BadRequestException(`Question not found.`);
       }
       throw e;
+
     }
   }
 

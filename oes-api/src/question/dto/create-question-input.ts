@@ -7,5 +7,4 @@ export class CreateQuestionInput {
 
   @Field()
   code?: string;
-
 }

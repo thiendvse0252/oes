@@ -9,7 +9,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-
 import { Question } from '@prisma/client';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -21,7 +20,6 @@ import { QuestionService } from './question.service';
 @Controller('question')
 @UseGuards(JwtAuthGuard)
 export class QuestionController {
-
   constructor(private questionService: QuestionService) {}
 
   @Get()
