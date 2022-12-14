@@ -13,6 +13,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GqlConfigService } from './gql-config.service';
 import { SubjectModule } from './subject/subject.module';
 
+import { TopicModule} from './topic/topic.module';
+import { QuestionModule} from './question/question.module';
+import { ExaminationModule} from './examination/examination.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [config] }),
@@ -31,8 +35,11 @@ import { SubjectModule } from './subject/subject.module';
     AuthModule,
     UsersModule,
     SubjectModule,
+    TopicModule,
+    QuestionModule,
+    ExaminationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, AppResolver],
+  controllers: [AppController, AnswerController],
+  providers: [AppService, AppResolver, AnswerService],
 })
 export class AppModule {}
