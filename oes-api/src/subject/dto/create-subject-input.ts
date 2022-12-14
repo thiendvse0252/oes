@@ -7,4 +7,7 @@ export class CreateSubjectInput {
 
   @Field()
   code: string;
+
+  @Field({ nullable: true })
+  description?: string;
 }

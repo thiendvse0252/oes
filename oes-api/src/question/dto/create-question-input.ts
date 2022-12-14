@@ -1,9 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateSubjectInput {
+export class CreateQuestionInput {
   @Field({ nullable: true })
-  name?: string;
+  content: string;
 
   @Field({ nullable: true })
   description?: string;
