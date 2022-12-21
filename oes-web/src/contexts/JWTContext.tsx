@@ -93,9 +93,9 @@ function AuthProvider({ children }: AuthProviderProps) {
         if (accessToken !== null && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get('/me');
+          const response = await axios.get('/user/me');
 
-          const user = response.data;
+          const user = response;
 
           dispatch({
             type: Types.Initial,
@@ -128,22 +128,23 @@ function AuthProvider({ children }: AuthProviderProps) {
     initialize();
   }, [state.isAuthenticated]);
 
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     const response: any = await axios.post('/auth/login', {
-      username,
+      email,
       password,
     });
 
-    if (response.status !== 200) {
+    if (response.error) {
       throw new Error(response.message);
     }
 
-    const { accessToken, refreshToken } = response.data;
+    const { accessToken, refreshToken } = response;
+    console.log({ accessToken, refreshToken, response });
 
     setSession(accessToken);
     persistSession(refreshToken);
 
-    const user: any = await axios.get('/me');
+    const user: any = await axios.get('/user/me');
 
     dispatch({
       type: Types.Login,

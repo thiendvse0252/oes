@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from './routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = import.meta.env.REACT_APP_HOST_API_KEY || 'http://localhost:8080';
+export const HOST_API = import.meta.env.REACT_APP_HOST_API_KEY || 'https://king-prawn-app-jpioq.ondigitalocean.app';
 
 export const FIREBASE_API = {
   apiKey: import.meta.env.REACT_APP_FIREBASE_API_KEY,
